@@ -8,16 +8,24 @@ type Props = {
     setUrl: React.Dispatch<React.SetStateAction<string>>;
     setSummary: React.Dispatch<React.SetStateAction<string>>;
     setUrlCache: React.Dispatch<React.SetStateAction<string[]>>;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function InputLink({url,setUrl,setSummary,setUrlCache}: Props) {
+export default function InputLink({url,setUrl,setSummary,setUrlCache,setLoading}: Props) {
     
     const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+
         e.preventDefault()
+        if(url === '') return;
+
+        setLoading(true)
        const data = await getArticle(url)
        setUrlCache( prev => [...prev,url] )
        setUrl('')
        setSummary(data?.data.summary)
+       if(!data || data === null) setSummary("Something Went wrong!")
+       setLoading(false)
+       
     }
   return (
     <form 
@@ -26,7 +34,7 @@ export default function InputLink({url,setUrl,setSummary,setUrlCache}: Props) {
     >
         <LinkIcon className="h-6 w-6 text-gray-600" />
         <input 
-        className="p-2 max-w-xs md:max-w-6xl flex-1"
+        className="p-2 max-w-xs md:max-w-6xl md:w-[30rem] flex-1"
         type="url"
         placeholder="Enter a URL"
         onChange={(e) => setUrl(e.target.value)}

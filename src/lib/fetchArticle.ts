@@ -9,12 +9,13 @@ export async function getArticle(url: string) {
           length: '3'
         },
         headers: {
-          'X-RapidAPI-Key': '4265b4cc8dmshfceb8453c7c70eap113f64jsnf2c36fdc4cce',
-          'X-RapidAPI-Host': 'article-extractor-and-summarizer.p.rapidapi.com'
+          'X-RapidAPI-Key': import.meta.env.VITE_RAPIDAPI_KEY,
+          'X-RapidAPI-Host': import.meta.env.VITE_RAPIDAPI_HOST,
         }
     };
     try {
         const response = await axios.request(options);
+        console.log(response);
         return response
     } catch (error) {
         console.error(error);

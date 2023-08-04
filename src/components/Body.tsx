@@ -2,12 +2,14 @@ import { ClipboardDocumentIcon } from "@heroicons/react/24/outline";
 import InputLink from "./InputLink";
 import copy from "copy-to-clipboard";
 import { useState } from 'react'
+import Loading from "./Loading";
 
 export default function Body() {
 
   const[url,setUrl] = useState('')
   const[summary,setSummary] = useState('')
   const[urlCache,seturlCache] = useState<string[]>([])
+  const[loading,setLoading] = useState<boolean>(false)
   
   return (
     <main className="px-4 md:px-20 py-3 md:py-8 flex flex-col space-y-2 md:space-y-5 items-center w-full justify-center text-center">
@@ -27,13 +29,15 @@ export default function Body() {
       </h4>
       <div className="space-y-4">
         <InputLink url={url} setUrl={setUrl} setSummary={setSummary} 
-        setUrlCache={seturlCache} />
+        setUrlCache={seturlCache} setLoading={setLoading} />
+        
         <div className="flex flex-col space-y-4  overflow-visible">
         {
           urlCache?.map( url => (
-            <div className="p-4 rounded-md bg-white flex items-center space-x-2 flex-1">
+            <div key={url} 
+            className="p-4 rounded-md bg-white flex items-center space-x-2 flex-1">
             <ClipboardDocumentIcon
-             onClick={() => copy(url)}
+             onClick={() =>copy(url)}
              className="h-6 w-6 text-gray-600 cursor-pointer"
              />
             <h1 className="text-blue-700 font-semibold overflow-hidden md:overflow-visible  max-w-[16rem] md:max-w-6xl">
@@ -41,6 +45,11 @@ export default function Body() {
             </h1>
            </div>
           ))
+        }
+        {
+          loading && (
+            <Loading />
+          )
         }
         </div>
         <div>
